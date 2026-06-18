@@ -9,12 +9,12 @@ CREATE OR REPLACE TABLE raw (
 );
 
 -- 2. Creazione dello Snowpipe 
-CREATE OR REPLACE PIPE s3_raw_pipe
+CREATE OR REPLACE PIPE SICILY_ER_DB.BRONZE.s3_raw_pipe
     AUTO_INGEST = TRUE
     AS
-    COPY INTO raw (raw_data)
-    FROM @s3_raw_stage
-    FILE_FORMAT = (FORMAT_NAME = 'json_format');
+    COPY INTO SICILY_ER_DB.BRONZE.raw (raw_data)
+    FROM @SICILY_ER_DB.BRONZE.s3_raw_stage
+    FILE_FORMAT = (FORMAT_NAME = 'SICILY_ER_DB.BRONZE.json_format');
 
 
 -- 3. RECUPERO DELLA CODA SQS (Fondamentale per AWS)
