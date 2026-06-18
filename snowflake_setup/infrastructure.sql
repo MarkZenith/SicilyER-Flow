@@ -1,5 +1,3 @@
-
--- 1. Creazione del Motore di Calcolo (Virtual Warehouse)
 CREATE WAREHOUSE IF NOT EXISTS SICILY_ER_WH
 WITH WAREHOUSE_SIZE = 'XSMALL'
 AUTO_SUSPEND = 60
