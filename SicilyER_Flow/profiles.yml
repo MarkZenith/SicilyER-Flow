@@ -1,0 +1,10 @@
+SicilyER_Flow:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      role: ACCOUNTADMIN
+      warehouse: COMPUTE_WH
+      database: SICILY_ER_DB
+      schema: SILVER
+      threads: 8
