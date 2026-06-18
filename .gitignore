@@ -216,3 +216,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+data_generation/*.json
+*.json
+*.csv
+
+
+*.pkl
+*.joblib
+
+
+.dbt/
+credentials*
