@@ -34,8 +34,7 @@ CREATE OR REPLACE FILE_FORMAT json_format
     STRIP_OUTER_ARRAY = TRUE
     IGNORE_UTF8_ERRORS = TRUE;
 
-
--- 5. Creazione dello Stage Esterno
+-- 5. Creazione dello Stage
 CREATE OR REPLACE STAGE s3_raw_stage
   URL = 's3://IL_TUO_BUCKET/raw-data/'
   STORAGE_INTEGRATION = s3_secure_integration
