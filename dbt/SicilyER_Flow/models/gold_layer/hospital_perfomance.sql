@@ -1,6 +1,7 @@
 {{ config(
-    materialized='table'
-) }}
+    materialized='table',
+    schema='gold'
+)}}
 
 
 -- 1. Quante persone ci sono fisicamente in reparto ORA
