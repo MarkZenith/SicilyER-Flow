@@ -7,6 +7,7 @@ in tempo reale sul Data Lake (Amazon S3) in formato JSON.
 import boto3
 import json
 import time
+import random
 from datetime import datetime
 from generator import generate_batch
 
@@ -20,8 +21,11 @@ s3_client = boto3.client("s3")
 def upload_to_datalake():
     """Genera un batch di accessi ospedalieri e lo carica su S3."""
     
-    # 1. Estrae i dati dal generatore
-    batch = generate_batch(10) 
+    # Sceglie un numero casuale di pazienti da 1 a 15 per ogni ciclo
+    numero_pazienti = random.randint(1, 15)
+    
+    # Genera gli eventi per quel numero casuale di pazienti
+    batch = generate_batch(numero_pazienti)
     
     # 2. Crea un nome file univoco con il timestamp attuale
     timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
