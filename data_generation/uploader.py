@@ -21,7 +21,7 @@ def upload_to_datalake():
     """Genera un batch di accessi ospedalieri e lo carica su S3."""
     
     # 1. Estrae i dati dal generatore
-    batch = generate_batch(50) 
+    batch = generate_batch(10) 
     
     # 2. Crea un nome file univoco con il timestamp attuale
     timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
