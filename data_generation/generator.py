@@ -191,7 +191,8 @@ def generate_batch(base_n: int = 50) -> list[dict]:
     tutti_gli_eventi = []
     for _ in range(n_pazienti):
         # Facciamo finta che il paziente sia arrivato tra le 12 e le 2 ore fa
-        arrivo_simulato = now - timedelta(hours=random.randint(2, 12), minutes=random.randint(0, 59))
+        # Pazienti arrivati da 0 a 180 minuti fa (crea una vera coda "viva")
+        arrivo_simulato = now - timedelta(minutes=random.randint(0, 180))
         storia_paziente = generate_patient_lifecycle(arrivo_simulato)
         tutti_gli_eventi.extend(storia_paziente) # Uniamo tutti gli eventi in un'unica grande lista
         
