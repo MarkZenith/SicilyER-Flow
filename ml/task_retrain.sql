@@ -1,0 +1,7 @@
+CREATE OR REPLACE TASK retrain_ml_model_task
+    WAREHOUSE = COMPUTE_WH
+    SCHEDULE = 'USING CRON 0 2 * * 0 Europe/Rome'
+AS
+    CALL SICILY_ER_DB.SILVER.TRAIN_WAIT_TIME_MODEL_PRO();
+
+ALTER TASK retrain_ml_model_task RESUME;

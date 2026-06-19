@@ -26,4 +26,5 @@ SELECT
 FROM raw_data
 
 --  partiziona i dati per paziente e tiene solo l'evento più recente
+WHERE timestamp_evento <= CURRENT_TIMESTAMP()
 QUALIFY ROW_NUMBER() OVER (PARTITION BY id_accesso ORDER BY timestamp_evento DESC) = 1
