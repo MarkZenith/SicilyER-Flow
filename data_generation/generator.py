@@ -8,16 +8,15 @@ distribuzione reale dei codici di triage e pesi demografici.
 import json
 import random
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from faker import Faker
-from datetime import timedelta
 
 # Inizializza Faker per dati localizzati in italiano
 fake = Faker('it_IT')
 
 # Dizionario Ospedali: i "pesi" riflettono i volumi reali di accesso delle province siciliane
 OSPEDALI = [
-    # --- PALERMO E PROVINCIA (Peso totale: 0.26) ---
+    # --- PALERMO E PROVINCIA ---
     {"id": "OSP_CIVICO_PA", "nome": "Civico - Palermo", "peso": 0.08},
     {"id": "OSP_VILLA_SOFIA_PA", "nome": "Villa Sofia Cervello - Palermo", "peso": 0.07},
     {"id": "OSP_POLICLINICO_PA", "nome": "Policlinico Giaccone - Palermo", "peso": 0.05},
@@ -26,46 +25,46 @@ OSPEDALI = [
     {"id": "OSP_TERMINI_PA", "nome": "Cimino - Termini Imerese (PA)", "peso": 0.01},
     {"id": "OSP_PARTINICO_PA", "nome": "Civico - Partinico (PA)", "peso": 0.01},
 
-    # --- CATANIA E PROVINCIA (Peso totale: 0.24) ---
+    # --- CATANIA E PROVINCIA ---
     {"id": "OSP_GARIBALDI_CT", "nome": "Garibaldi - Catania", "peso": 0.08},
     {"id": "OSP_CANNIZZARO_CT", "nome": "Cannizzaro - Catania", "peso": 0.07},
     {"id": "OSP_POLICLINICO_CT", "nome": "Policlinico San Marco - Catania", "peso": 0.06},
     {"id": "OSP_ACIREALE_CT", "nome": "Santa Marta - Acireale (CT)", "peso": 0.02},
     {"id": "OSP_CALTAGIRONE_CT", "nome": "Gravina - Caltagirone (CT)", "peso": 0.01},
 
-    # --- MESSINA E PROVINCIA (Peso totale: 0.13) ---
+    # --- MESSINA E PROVINCIA ---
     {"id": "OSP_POLICLINICO_ME", "nome": "Policlinico Martino - Messina", "peso": 0.04},
     {"id": "OSP_PAPARDO_ME", "nome": "Papardo - Messina", "peso": 0.04},
     {"id": "OSP_MILAZZO_ME", "nome": "Fogliani - Milazzo (ME)", "peso": 0.02},
     {"id": "OSP_TAORMINA_ME", "nome": "San Vincenzo - Taormina (ME)", "peso": 0.02},
     {"id": "OSP_PATTI_ME", "nome": "Barone Romeo - Patti (ME)", "peso": 0.01},
 
-    # --- TRAPANI E PROVINCIA (Peso totale: 0.08) ---
+    # --- TRAPANI E PROVINCIA ---
     {"id": "OSP_SANT_ANTONIO_TP", "nome": "Sant'Antonio Abate - Trapani", "peso": 0.03},
     {"id": "OSP_MARSALA_TP", "nome": "Paolo Borsellino - Marsala (TP)", "peso": 0.02},
     {"id": "OSP_MAZARA_TP", "nome": "Abele Ajello - Mazara del Vallo (TP)", "peso": 0.02},
     {"id": "OSP_CASTELVETRANO_TP", "nome": "Vittorio Emanuele II - Castelvetrano (TP)", "peso": 0.01},
 
-    # --- SIRACUSA E PROVINCIA (Peso totale: 0.08) ---
+    # --- SIRACUSA E PROVINCIA ---
     {"id": "OSP_UMBERTO_SR", "nome": "Umberto I - Siracusa", "peso": 0.04},
     {"id": "OSP_AVOLA_SR", "nome": "Di Maria - Avola (SR)", "peso": 0.02},
     {"id": "OSP_LENTINI_SR", "nome": "Ospedale Civile - Lentini (SR)", "peso": 0.02},
 
-    # --- AGRIGENTO E PROVINCIA (Peso totale: 0.07) ---
+    # --- AGRIGENTO E PROVINCIA ---
     {"id": "OSP_GIOVANNI_AG", "nome": "San Giovanni di Dio - Agrigento", "peso": 0.03},
     {"id": "OSP_SCIACCA_AG", "nome": "Giovanni Paolo II - Sciacca (AG)", "peso": 0.02},
     {"id": "OSP_CANICATTI_AG", "nome": "Barone Lombardo - Canicattì (AG)", "peso": 0.02},
 
-    # --- RAGUSA E PROVINCIA (Peso totale: 0.06) ---
+    # --- RAGUSA E PROVINCIA ---
     {"id": "OSP_GIOVANNI_RG", "nome": "Giovanni Paolo II - Ragusa", "peso": 0.03},
     {"id": "OSP_VITTORIA_RG", "nome": "Guzzardi - Vittoria (RG)", "peso": 0.02},
     {"id": "OSP_MODICA_RG", "nome": "Maggiore - Modica (RG)", "peso": 0.01},
 
-    # --- CALTANISSETTA E PROVINCIA (Peso totale: 0.05) ---
+    # --- CALTANISSETTA E PROVINCIA ---
     {"id": "OSP_SANT_ELIA_CL", "nome": "Sant'Elia - Caltanissetta", "peso": 0.03},
     {"id": "OSP_GELA_CL", "nome": "Vittorio Emanuele - Gela (CL)", "peso": 0.02},
 
-    # --- ENNA E PROVINCIA (Peso totale: 0.03) ---
+    # --- ENNA E PROVINCIA ---
     {"id": "OSP_UMBERTO_EN", "nome": "Umberto I - Enna", "peso": 0.02},
     {"id": "OSP_PIAZZA_EN", "nome": "Chiello - Piazza Armerina (EN)", "peso": 0.01},
 ]
@@ -169,7 +168,7 @@ def generate_patient_lifecycle(timestamp_arrivo: datetime) -> list[dict]:
         evento_oss["status"] = "In osservazione"
         evento_oss["timestamp_evento"] = tempo_corrente.isoformat()
         eventi_paziente.append(evento_oss)
-        tempo_corrente += timedelta(minutes=minuti_osservazione) # Aggiungiamo il tempo di osservazione
+        tempo_corrente += timedelta(minutes=minuti_osservazione)
     else:
         tempo_corrente += timedelta(minutes=minuti_visita)
 
@@ -190,19 +189,18 @@ def generate_batch(base_n: int = 50) -> list[dict]:
     
     tutti_gli_eventi = []
     for _ in range(n_pazienti):
-        # Facciamo finta che il paziente sia arrivato tra le 12 e le 2 ore fa
-        # Pazienti arrivati da 0 a 180 minuti fa (crea una vera coda "viva")
-        arrivo_simulato = now - timedelta(minutes=random.randint(0, 180))
+        # FIX FONDAMENTALE: Pazienti arrivati da 0 a 15 minuti fa (altrimenti risultano già dimessi nel passato)
+        arrivo_simulato = now - timedelta(minutes=random.randint(0, 15))
         storia_paziente = generate_patient_lifecycle(arrivo_simulato)
-        tutti_gli_eventi.extend(storia_paziente) # Uniamo tutti gli eventi in un'unica grande lista
+        tutti_gli_eventi.extend(storia_paziente)
         
-    # Mescoliamo gli eventi per simulare un flusso dati non perfettamente ordinato (opzionale ma molto realistico per lo streaming!)
+    # Mescoliamo gli eventi per simulare un flusso dati non perfettamente ordinato
     random.shuffle(tutti_gli_eventi)
     return tutti_gli_eventi
 
 if __name__ == "__main__":
     # Test esecuzione locale
-    sample_batch = generate_batch(5) # Proviamo con 5 pazienti (genereranno circa 15-20 record JSON)
+    sample_batch = generate_batch(5) 
     filename = f"sample_accessi_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(sample_batch, f, ensure_ascii=False, indent=2)
