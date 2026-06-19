@@ -183,7 +183,7 @@ def generate_patient_lifecycle(timestamp_arrivo: datetime) -> list[dict]:
 
 def generate_batch(base_n: int = 50) -> list[dict]:
     """Genera un batch di accessi, creando la storia clinica completa per ciascuno."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now()
     weight = get_arrival_weight(now.hour, now.month)
     
     n_pazienti = max(1, int(base_n * weight))
